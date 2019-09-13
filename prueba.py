@@ -88,9 +88,9 @@ def main():
         camera_bp.set_attribute('sensor_tick', '0.05')
         #(x=-5.5,y=4, z=1.0)
         camera_transformI = carla.Transform(carla.Location(x=0,y=4, z=1.0),carla.Rotation(pitch=10, yaw=-90, roll=0))
-        camera_transformD = carla.Transform(carla.Location(x=0,y=-4, z=1.0),carla.Rotation(pitch=20, yaw=90, roll=0))
-        camera_transformF = carla.Transform(carla.Location(x=5,y=0, z=1.0),carla.Rotation(pitch=20, yaw=180, roll=0))
-        camera_transformA = carla.Transform(carla.Location(x=-5,y=0, z=1.0),carla.Rotation(pitch=20, yaw=0, roll=0))
+        camera_transformD = carla.Transform(carla.Location(x=0,y=-4, z=1.0),carla.Rotation(pitch=10, yaw=90, roll=0))
+        camera_transformF = carla.Transform(carla.Location(x=5,y=0, z=1.0),carla.Rotation(pitch=10, yaw=180, roll=0))
+        camera_transformA = carla.Transform(carla.Location(x=-5,y=0, z=1.0),carla.Rotation(pitch=10, yaw=0, roll=0))
 
         cameraI = world.spawn_actor(camera_bp, camera_transformI, attach_to=vehicle)
         cameraD = world.spawn_actor(camera_bp, camera_transformD, attach_to=vehicle)
@@ -108,14 +108,11 @@ def main():
         print('created %s' % cameraD.type_id)
         print('created %s' % cameraF.type_id)
         print('created %s' % cameraA.type_id)
-        imagesI=[]
-        imagesD=[]
-        imagesF=[]
-        imagesA=[]
+        
 
         # Now we register the function that will be called each time the sensor
         # receives an image. In this example we are saving the image to disk
-        print("beg")
+        print("Capturing images")
         cameraI.listen(lambda image: image.save_to_disk('outI/%06d.tiff' % image.frame))
         cameraD.listen(lambda image: image.save_to_disk('outD/%06d.tiff' % image.frame))
         cameraF.listen(lambda image: image.save_to_disk('outF/%06d.tiff' % image.frame))
@@ -123,18 +120,7 @@ def main():
         #cameraA.listen(lambda image: image.save_to_disk('_out/%06dA.tiff' % image.frame))
 
 
-        time.sleep(10)
-        print("fin")
-        filesI = [f for f in listdir('outI/') if isfile(join('outI/', f))]
-        for file in filesI:
-            imagesI.append(cv2.imread('outI/'+file,1))
-        print len(filesI)
-        fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        #8 2 videos mitad
-        outI = cv2.VideoWriter('outputI.avi',fourcc, 10, (1200,700))
-        while(len(imagesI)!=0 ):
-            outI.write(imagesI.pop())
-        outI.release()    
+        time.sleep(10)        
     finally:
         
         print('destroying actors')
