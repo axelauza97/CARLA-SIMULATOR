@@ -26,6 +26,11 @@ import cv2
 import numpy as np
 from os import listdir
 from os.path import isfile, join
+
+
+import shutil
+
+
 def main():
     actor_list = []
 
@@ -50,7 +55,12 @@ def main():
 
         # Now let's filter all the blueprints of type 'vehicle' and choose one
         # at random.
-        bp = random.choice(blueprint_library.filter('vehicle'))
+        
+        #bp = random.choice(blueprint_library.filter('vehicle'))
+        #BICICLETA vehicle.bh.crossbike
+        #MOTO vehicle.harley-davidson.low rider
+        #AUTO vehicle.toyota.prius
+        bp = blueprint_library.find('vehicle.toyota.prius')
 
         # A blueprint contains the list of attributes that define a vehicle's
         # instance, we can read them and modify some of them. For instance,
@@ -61,11 +71,11 @@ def main():
 
         # Now we need to give an initial transform to the vehicle. We choose a
         # random transform from the list of recommended spawn points of the map.
-        
+        # location of manual control
         #transform = random.choice(world.get_map().get_spawn_points())
         #a=world.get_map().get_spawn_points()
         #print(a[0])
-        transform=carla.Transform(carla.Location(x=42.9, y=193.9, z=1.842997), carla.Rotation(pitch=0, yaw=0, roll=0))
+        transform=carla.Transform(carla.Location(x=-112.5, y=0.5, z=0.5), carla.Rotation(pitch=0, yaw=0, roll=0))
         # So let's tell the world to spawn the vehicle.
         vehicle = world.spawn_actor(bp, transform)
 
@@ -120,7 +130,7 @@ def main():
         #cameraA.listen(lambda image: image.save_to_disk('_out/%06dA.tiff' % image.frame))
 
 
-        time.sleep(10)        
+        time.sleep(30)        
     finally:
         
         print('destroying actors')
@@ -130,5 +140,8 @@ def main():
 
 
 if __name__ == '__main__':
-
+    shutil.rmtree('outA')
+    shutil.rmtree('outD')
+    shutil.rmtree('outF')
+    shutil.rmtree('outI')
     main()
