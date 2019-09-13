@@ -75,7 +75,7 @@ def main():
         #transform = random.choice(world.get_map().get_spawn_points())
         #a=world.get_map().get_spawn_points()
         #print(a[0])
-        transform=carla.Transform(carla.Location(x=-112.5, y=0.5, z=0.5), carla.Rotation(pitch=0, yaw=0, roll=0))
+        transform=carla.Transform(carla.Location(x=45.0, y=192.9, z=0.5), carla.Rotation(pitch=0, yaw=0, roll=0))
         # So let's tell the world to spawn the vehicle.
         vehicle = world.spawn_actor(bp, transform)
 
