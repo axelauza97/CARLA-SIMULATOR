@@ -25,7 +25,7 @@ import time
 import cv2
 import numpy as np
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join,isdir
 
 
 import shutil
@@ -75,7 +75,8 @@ def main():
         #transform = random.choice(world.get_map().get_spawn_points())
         #a=world.get_map().get_spawn_points()
         #print(a[0])
-        transform=carla.Transform(carla.Location(x=45.0, y=192.9, z=0.5), carla.Rotation(pitch=0, yaw=0, roll=0))
+        #heading IS Z
+        transform=carla.Transform(carla.Location(x=5.7, y=-120.3, z=0.5), carla.Rotation(pitch=0, yaw=-90, roll=0))
         # So let's tell the world to spawn the vehicle.
         vehicle = world.spawn_actor(bp, transform)
 
@@ -107,8 +108,6 @@ def main():
         cameraF = world.spawn_actor(camera_bp, camera_transformF, attach_to=vehicle)
         cameraA = world.spawn_actor(camera_bp, camera_transformA, attach_to=vehicle)
 
-
-        
         actor_list.append(cameraI)
         actor_list.append(cameraD)
         actor_list.append(cameraF)
@@ -140,8 +139,9 @@ def main():
 
 
 if __name__ == '__main__':
-    shutil.rmtree('outA')
-    shutil.rmtree('outD')
-    shutil.rmtree('outF')
-    shutil.rmtree('outI')
+    if isdir('outI/')  and isdir('outI/') and isdir('outI/') and isdir('outI/'):
+        shutil.rmtree('outA')
+        shutil.rmtree('outD')
+        shutil.rmtree('outF')
+        shutil.rmtree('outI')
     main()
