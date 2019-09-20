@@ -1,0 +1,1 @@
+transform=carla.Transform(carla.Location(x=5.7, y=-120.3, z=0.5), carla.Rotation(pitch=0, yaw=-90, roll=0))
