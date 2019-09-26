@@ -31,35 +31,46 @@ import shutil
 actor_list = []
 transforms_pedestrians=[]
 
-centerLocation=carla.Transform(location=carla.Location(x=5.2,y=-135.2,z=0))
+centerLocation=carla.Transform(location=carla.Location(x=-20.8,y=-57.9,z=0))
+ 
+
 
 
 def filterLocation(variable):
     location=centerLocation.location
-    locationVariable=variable.location
-    if locationVariable.x<=location.x+20 and locationVariable.x>=location.x-20:
+    locationVariable=variable
+    if locationVariable.x<=location.x+8 and locationVariable.x>=location.x-8 and locationVariable.y<=location.y+8 and locationVariable.y>=location.y-8:
         return True
     else: 
         return False
 
 def fill_transforms(n,world):
-    puntos=world.get_map().get_spawn_points()
-    tmp=filter(filterLocation,puntos)
+    puntos =[]
+    finalPoints=[]
+    puntos.append(world.get_random_location_from_navigation())
+    while len(finalPoints)<=n:
+        punto=world.get_random_location_from_navigation()
+        if not(punto in puntos):
+            puntos.append(punto) 
+            finalPoints=filter(filterLocation,puntos)
+            if not(punto in finalPoints):
+                puntos.remove(punto)
     cont=0
     print "Filling spawn positions"
     while(n!=cont):
-        spawn_point = tmp.pop()
-        if (spawn_point.location != None and not(spawn_point in transforms_pedestrians)):
-            transforms_pedestrians.append(spawn_point)
+        spawn_point = finalPoints.pop()
+        if (spawn_point != None and not(spawn_point in transforms_pedestrians)):
+            transforms_pedestrians.append(carla.Transform(location=spawn_point))
             cont=cont+1
 
 def spawn_pedestrian(blueprint_library,world):
     blueprintsWalkers = blueprint_library.filter("walker.pedestrian.*")
     walker_bp = random.choice(blueprintsWalkers)
     transform=transforms_pedestrians.pop()
-    human = world.spawn_actor(walker_bp, transform)
-    actor_list.append(human)
-    print('created %s' % human.type_id)
+    human = world.try_spawn_actor(walker_bp, transform)
+    if not(human is None):
+        actor_list.append(human)
+        print('created %s' % human.type_id)
 
 def add_controller(world,blueprint_library):
     # 3. we spawn the walker controller
@@ -78,6 +89,7 @@ def add_controller(world,blueprint_library):
 
 def main():
     try:
+        # IDEAL 
         n=50
         client = carla.Client('localhost', 2000)
         client.set_timeout(2.0)
@@ -106,14 +118,12 @@ def main():
         camera_bp.set_attribute('sensor_tick', '0.05')
         camera_bp.set_attribute('fov', '100')
         #(x=-5.5,y=4, z=1.0)
-
         x0=centerLocation.location.x
         y0=centerLocation.location.y
-
-        camera_transformI = carla.Transform(carla.Location(x=x0,y=y0, z=6),carla.Rotation(pitch=-30, yaw=-90, roll=0))
-        camera_transformD = carla.Transform(carla.Location(x=x0,y=y0, z=6),carla.Rotation(pitch=-30, yaw=90, roll=0))
-        camera_transformF = carla.Transform(carla.Location(x=x0,y=y0, z=6),carla.Rotation(pitch=-30, yaw=180, roll=0))
-        camera_transformA = carla.Transform(carla.Location(x=x0,y=y0, z=6),carla.Rotation(pitch=-30, yaw=0, roll=0))
+        camera_transformI = carla.Transform(carla.Location(x=x0+5,y=y0+5, z=3),carla.Rotation(pitch=-25, yaw=225, roll=0))
+        camera_transformD = carla.Transform(carla.Location(x=x0+5,y=y0-5, z=3),carla.Rotation(pitch=-25, yaw=135, roll=0))
+        camera_transformF = carla.Transform(carla.Location(x=x0-5,y=y0+5, z=3),carla.Rotation(pitch=-25, yaw=315, roll=0))
+        camera_transformA = carla.Transform(carla.Location(x=x0-5,y=y0-5, z=3),carla.Rotation(pitch=-25, yaw=45, roll=0))
 
         cameraI = world.spawn_actor(camera_bp, camera_transformI)
         cameraD = world.spawn_actor(camera_bp, camera_transformD)

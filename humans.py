@@ -78,7 +78,7 @@ def main():
         # set walk to random point
         controller.go_to_location(world.get_random_location_from_navigation())
         # random max speed
-        controller.set_max_speed(1)    # max speed between 1 and 2 (default is 1.4 m/s)
+        controller.set_max_speed(2)    # max speed between 1 and 2 (default is 1.4 m/s)
 
         # It is important to note that the actors we create won't be destroyed
         # unless we call their "destroy" function. If we fail to call "destroy"
