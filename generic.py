@@ -29,7 +29,7 @@ from os.path import isfile, join,isdir
 
 
 import shutil
-
+##GENERIC FOR VARIOUS VEHICLES
 
 def main():
     actor_list = []
