@@ -1,0 +1,4 @@
+using python 2.7 CARLA
+FOR INTALLING IN python spec version
+sudo pip2 install numpy
+
